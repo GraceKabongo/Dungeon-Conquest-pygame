@@ -9,6 +9,7 @@ SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 
 SCALE = 2
 GRAVITY = 0.75
+COUNTER_SHOT = 0
 
 FPS = 60
 clock = pygame.time.Clock()
@@ -31,8 +32,8 @@ while run:
     screen.blit(background_image, (0, 0))
     pygame.draw.line(screen, (0, 0, 200), (0, 350), (SCREEN_WIDTH, 350))
     
-    player.arrows.draw(screen)
     for arrow in player.arrows:
+        arrow.draw(screen)
         arrow.move()
 
     player.draw(screen)
@@ -48,7 +49,12 @@ while run:
         player.is_runnig = False
     
     if player.is_shooting == True:
-        player.shoot()
+        last_img = 'assets/player/Attack/5.png'
+
+        if last_img == f'assets/{player.sprite_name}/{player.current_animation_type}/{int(player.current_frame)}.png':
+                player.shoot()
+                player.is_shooting = False
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -62,15 +68,17 @@ while run:
             elif event.key == pygame.K_UP:
                 player.is_jumping = True
             elif event.key == pygame.K_SPACE:
+                
                 player.is_shooting = True
         
+                
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 moving_right = False
             elif event.key == pygame.K_LEFT:
                 moving_left = False
-            elif event.key == pygame.K_SPACE:
-                player.is_shooting = False
+            # elif event.key == pygame.K_SPACE:
+            #     player.is_shooting = False
 
     clock.tick(FPS)
 

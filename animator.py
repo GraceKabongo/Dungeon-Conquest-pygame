@@ -7,7 +7,8 @@ class Animator(pygame.sprite.Sprite):
         super().__init__()
         self.sprite_name = sprite_name
         self.image = pygame.image.load(f'assets/{self.sprite_name}/Idel/0.png')
-        self.current_image = 0
+        self.current_frame = 0
+        self.current_image = self.image
         self.animation = False
 
 
@@ -18,12 +19,12 @@ class Animator(pygame.sprite.Sprite):
         # get images by name and type of animation
         self.images = animations
         if self.animation:   
-            self.current_image += animation_speed
-            if self.current_image >= len(self.images):
-                self.current_image = 0
+            self.current_frame += animation_speed
+            if self.current_frame >= len(self.images):
+                self.current_frame = 0
             
-            self.image = self.images[int(self.current_image)]
-
+            self.image = self.images[int(self.current_frame)]
+        
 
 def load_animation_images(sprite_name, animation_type, scale=2):
 
