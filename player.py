@@ -1,5 +1,7 @@
 import pygame
+from arrow import Arrow
 from animator import Animator, load_animation_images
+import time
 
 class Player(Animator):
     def __init__(self, x, y, scale):
@@ -13,7 +15,9 @@ class Player(Animator):
         self.is_runnig = False
         self.is_jumping = False
         self.in_air = False
+        self.is_shooting = False
 
+        self.arrows = pygame.sprite.Group()
 
         self.rect = self.image.get_rect()
         self.rect.centerx = x
@@ -21,9 +25,10 @@ class Player(Animator):
 
         # list of all player animation
         self.player_animations = {
-            'Idel' : load_animation_images(self.sprite_name, 'Idel', scale),
-            'Run'  : load_animation_images(self.sprite_name, 'Run', scale),
-            'Jump' : load_animation_images(self.sprite_name, 'Jump', scale)
+            'Idel' : load_animation_images(self.sprite_name, 'Idel'),
+            'Run'  : load_animation_images(self.sprite_name, 'Run'),
+            'Jump' : load_animation_images(self.sprite_name, 'Jump'),
+            'Attack' : load_animation_images(self.sprite_name, 'Attack')
         }
 
     def draw(self, screen):
@@ -72,8 +77,21 @@ class Player(Animator):
         elif self.in_air == True:
             self.start_animation()
             self.animate(self.player_animations.get('Jump'))
+        elif self.is_shooting:
+            self.start_animation()
+            self.animate(self.player_animations.get('Attack'), 0.2)
         else:
             self.start_animation()
-            self.animate(self.player_animations.get('Idel'))      
+            self.animate(self.player_animations.get('Idel')) 
+        
+        
+
+
+    def shoot(self):
+        if self.direction >=1:
+            arrow = Arrow(self.rect.centerx + 120, self.rect.centery + 30, self.direction, scale=2) 
+        else:
+            arrow = Arrow(self.rect.centerx - 30, self.rect.centery + 30, self.direction, scale=2)   
+        self.arrows.add(arrow)
 
         

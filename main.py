@@ -7,7 +7,7 @@ pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 
-SCALE = 1
+SCALE = 2
 GRAVITY = 0.75
 
 FPS = 60
@@ -17,7 +17,8 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('DUNGEON-CONQUEST')
 
-GREY = (50, 50, 50)
+background_image = pygame.image.load('assets/Background.png')
+background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 player = Player(200, 200, SCALE)
 moving_right = False 
@@ -27,11 +28,12 @@ run = True
 
 while run:
 
-    print((player.image.get_width(),player.image.get_height()))
-
-    screen.fill(GREY)
-    pygame.draw.line(screen, (255, 0, 0), (0, 350), (SCREEN_WIDTH, 350))
-    pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(player.rect.centerx, player.rect.centery, 100, 100))
+    screen.blit(background_image, (0, 0))
+    pygame.draw.line(screen, (0, 0, 200), (0, 350), (SCREEN_WIDTH, 350))
+    
+    player.arrows.draw(screen)
+    for arrow in player.arrows:
+        arrow.move()
 
     player.draw(screen)
     player.update_animation()
@@ -44,6 +46,9 @@ while run:
         player.is_runnig = True
     else:
         player.is_runnig = False
+    
+    if player.is_shooting == True:
+        player.shoot()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -56,12 +61,16 @@ while run:
                 moving_left = True
             elif event.key == pygame.K_UP:
                 player.is_jumping = True
+            elif event.key == pygame.K_SPACE:
+                player.is_shooting = True
         
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 moving_right = False
             elif event.key == pygame.K_LEFT:
                 moving_left = False
+            elif event.key == pygame.K_SPACE:
+                player.is_shooting = False
 
     clock.tick(FPS)
 
