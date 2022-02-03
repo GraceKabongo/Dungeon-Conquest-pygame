@@ -1,4 +1,5 @@
 import pygame
+import pytmx
 from player import Player
 
 
@@ -50,10 +51,9 @@ while run:
     
     if player.is_shooting == True:
         last_img = 'assets/player/Attack/5.png'
-
-        if last_img == f'assets/{player.sprite_name}/{player.current_animation_type}/{int(player.current_frame)}.png':
-                player.shoot()
-                player.is_shooting = False
+        if player.player_animations.get('Attack')[-1] == player.image:
+            player.shoot()
+            player.is_shooting = False
 
 
     for event in pygame.event.get():

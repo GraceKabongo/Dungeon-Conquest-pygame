@@ -97,8 +97,8 @@ class Player(Animator):
             arrow = Arrow(self.rect.centerx + 120, self.rect.centery + 30, self.direction, scale=2) 
         else:
             arrow = Arrow(self.rect.centerx - 30, self.rect.centery + 30, self.direction, scale=2)   
-        
         self.arrows.add(arrow)
+
         
 
         
