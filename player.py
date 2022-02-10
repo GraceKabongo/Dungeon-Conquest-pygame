@@ -3,7 +3,7 @@ from arrow import Arrow
 from animator import Animator, load_animation_images
 
 class Player(Animator):
-    def __init__(self, x, y, scale):
+    def __init__(self, x, y):
         super().__init__('player')
 
         self.direction = 1
@@ -15,7 +15,6 @@ class Player(Animator):
         self.is_jumping = False
         self.in_air = False
         self.is_shooting = False
-        self.current_animation_type = ''
 
         self.arrows = pygame.sprite.Group()
 
@@ -75,19 +74,15 @@ class Player(Animator):
         if self.is_runnig:
             self.start_animation()
             self.animate(self.player_animations.get('Run'))
-            self.current_animation_type = 'Run'
         elif self.in_air == True:
             self.start_animation()
             self.animate(self.player_animations.get('Jump'))
-            self.current_animation_type = 'Jump'
         elif self.is_shooting:
             self.start_animation()
             self.animate(self.player_animations.get('Attack'), 0.2)
-            self.current_animation_type = 'Attack'
         else:
             self.start_animation()
             self.animate(self.player_animations.get('Idel'))
-            self.current_animation_type = 'Idel' 
         
         
 

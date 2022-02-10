@@ -14,8 +14,9 @@ class Animator(pygame.sprite.Sprite):
 
     def start_animation(self):
         self.animation = True
+        
 
-    def animate(self, animations, animation_speed=0.3):
+    def animate(self, animations, animation_speed=0.2):
         # get images by name and type of animation
         self.images = animations
         if self.animation:   
@@ -26,7 +27,7 @@ class Animator(pygame.sprite.Sprite):
             self.image = self.images[int(self.current_frame)]
         
 
-def load_animation_images(sprite_name, animation_type, scale=2):
+def load_animation_images(sprite_name : str, animation_type : str, scale=2):
 
     images = []
     path = f'assets/{sprite_name}/{animation_type}/'

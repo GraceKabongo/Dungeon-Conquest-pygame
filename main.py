@@ -1,5 +1,5 @@
 import pygame
-import pytmx
+from enemy import Enemy
 from player import Player
 
 
@@ -22,7 +22,10 @@ pygame.display.set_caption('DUNGEON-CONQUEST')
 background_image = pygame.image.load('assets/Background.png')
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-player = Player(200, 200, SCALE)
+player = Player(200, 200)
+enemy_group = pygame.sprite.Group()
+enemy_group.add(Enemy(400, 250))
+
 moving_right = False 
 moving_left = False
 
@@ -32,10 +35,23 @@ while run:
 
     screen.blit(background_image, (0, 0))
     pygame.draw.line(screen, (0, 0, 200), (0, 350), (SCREEN_WIDTH, 350))
-    
-    for arrow in player.arrows:
-        arrow.draw(screen)
-        arrow.move()
+
+        
+    for enemy in enemy_group:
+            
+        enemy.draw(screen)
+        enemy.update_animation()
+        
+        # TODO : FIX THIS BUG
+        
+        for arrow in player.arrows:
+            arrow.draw(screen)
+            arrow.move()
+        
+            if arrow.rect.colliderect(enemy.death_zone):
+                arrow.kill()
+                enemy.take_damage(50)
+                print(f'enemy health = {enemy.health}')
 
     player.draw(screen)
     player.update_animation()
@@ -50,10 +66,10 @@ while run:
         player.is_runnig = False
     
     if player.is_shooting == True:
-        last_img = 'assets/player/Attack/5.png'
-        if player.player_animations.get('Attack')[-1] == player.image:
+        if player.player_animations.get('Attack')[-2] == player.image:
             player.shoot()
             player.is_shooting = False
+        player.start_animation()
 
 
     for event in pygame.event.get():
@@ -77,8 +93,6 @@ while run:
                 moving_right = False
             elif event.key == pygame.K_LEFT:
                 moving_left = False
-            # elif event.key == pygame.K_SPACE:
-            #     player.is_shooting = False
 
     clock.tick(FPS)
 
